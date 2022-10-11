@@ -1,6 +1,6 @@
 import './App.css';
 import {useDispatch, useSelector} from "react-redux";
-import {addUser} from './features/Users';
+import {addUser, deleteUser, updateUserName} from './features/Users';
 import { useState } from 'react';
 
 function App() {
@@ -9,6 +9,8 @@ function App() {
 
   const [addedName, setAddedName] = useState("");
   const [addedUserName, setAddedUsername] = useState("");
+
+  const [currentUserName, setCurrentUserName] = useState("");
 
   return (
 
@@ -22,7 +24,7 @@ function App() {
         <input type="text" value={addedUserName} name='username' required placeholder='Username...'
         onChange={(val) => setAddedUsername([val.target.value])}/>
         <button
-        onClick={() => {dispatch(addUser({id: Number([Number((userList.length)-1)].id) + Number(1), name: addedName, username: addedUserName}))}}>Add User</button>
+        onClick={() => {dispatch(addUser({id: Number([userList.length - 1].id) + 1, name: addedName, username: addedUserName}))}}>Add User</button>
       </div>
 
         {userList.map((user) => {
@@ -32,15 +34,22 @@ function App() {
             <h3>UserName: {user.username} (ID:{user.id})</h3>
             <input 
             type="text" 
-            value="" 
-            name='new_username' 
+            onChange={(event) => {
+              setCurrentUserName(event.target.value);
+            }} 
             placeholder="New Username" 
-            onChange={(val) =>{
-              setAddedName([val.target.value])}
-            }/>
+            />
 
-            <button>Update Username</button>
-            <button>Delete User</button>
+            <button
+            onClick={() =>{ dispatch(updateUserName({id: user.id, username: currentUserName}
+            ))}}
+            >Update Username</button>
+            
+            <button
+            onClick={() => {
+              let userId = parseInt(user.id);
+              dispatch(deleteUser({ id: userId }))
+            }}>Delete User</button>
 
             </div>
           ) 
