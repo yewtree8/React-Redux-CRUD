@@ -6,9 +6,10 @@ export const userSlice = createSlice({
     initialState: {value: UsersData},
     reducers: {
         addUser: (state, action) => {
-            // For adding a user in a second
+            state.value.push(action.payload); //add the obj
         }
     }
 });
 
+export const {addUser} = userSlice.actions;
 export default userSlice.reducer;
